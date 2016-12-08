@@ -20,7 +20,6 @@ namespace DoubleHash
             {
                 num = rnd.Next();
                 dhc.Add(num, num.ToString() + " ") ;
-                Debug.WriteLine(i);
             }
         }
     }
