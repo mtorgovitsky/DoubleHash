@@ -40,7 +40,7 @@ namespace DoubleHash
             member = new MyData[(int)tmpSize];
         }
 
-        public bool Add(Key k, Value v)
+        public void Add(Key k, Value v)
         {
             int index = HashFunction(k);
             if (member[index] == null)
@@ -64,9 +64,9 @@ namespace DoubleHash
                 }
             }
             if (count == this.size)
-                return false;
+                return;
             count++;
-            return true;
+            return;
         }
 
         private int HashFunction(Key k)
@@ -87,9 +87,20 @@ namespace DoubleHash
             Random jumpRand = new Random();
             int tmpJump = jumpRand.Next(0, this.size);
             tmpJump %= member.Length; //To stay inside of the array index
-            while (tmpJump == currIndex)
+
+            int forceStep = 3;
+            int counter = 0;
+            int maxTry = 20;
+
+            while (tmpJump == currIndex) //We need index that differend from current
             {
                 jumpRand.Next(0, this.size);
+                //If the Jump function returns same jump for more than maxTry times
+                //then force the index to go 3 steps forward
+                if (counter > maxTry)
+                    tmpJump += forceStep;
+                //else continue to count the Jum tries
+                counter++;
                 tmpJump %= member.Length; //To stay inside of the array index
             }
             //string s = k.ToString();
@@ -103,7 +114,7 @@ namespace DoubleHash
             //}
             //tmpJump /= charsNum; //AVG of the sum of the chars asci from the ToString()
 
-            return tmpJump; 
+            return tmpJump;
         }
 
 
